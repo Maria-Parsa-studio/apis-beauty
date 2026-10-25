@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glam Beauty Salon | Online Booking</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial}
+body{background:#fdf2f8;color:#333;min-height:100vh;display:flex;justify-content:center;padding:16px}
+.container{width:100%;max-width:480px;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 10px 30px rgba(236,72,153,.2)}
+.header{background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;padding:28px 20px;text-align:center}
+.header h1{font-size:26px;margin-bottom:6px}
+.header p{opacity:.9;font-size:14px}
+.badges{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.badge{background:rgba(255,255,255,.2);padding:6px 12px;border-radius:20px;font-size:12px}
+.contact-row{display:flex;gap:10px;padding:14px}
+.contact-row a{flex:1;text-align:center;text-decoration:none;padding:12px 6px;border-radius:12px;font-weight:700;font-size:14px}
+.call-btn{background:#111827;color:#fff}
+.wa-btn{background:#22c55e;color:#fff}
+.section{padding:16px 18px;border-top:1px solid #f3f4f6}
+.section h2{font-size:17px;margin-bottom:12px}
+.services{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.svc{border:2px solid #f3f4f6;border-radius:12px;padding:12px;cursor:pointer;text-align:center}
+.svc.selected{border-color:#ec4899;background:#fdf2f8}
+.svc b{display:block;font-size:14px}
+.svc span{font-size:13px;color:#ec4899;font-weight:700}
+.times{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}
+.time{padding:10px 4px;border:2px solid #e5e7eb;border-radius:10px;text-align:center;font-size:13px;cursor:pointer;font-weight:600}
+.time.selected{background:#111827;color:#fff;border-color:#111827}
+label{font-size:13px;font-weight:600;display:block;margin:12px 0 6px}
+input,select{width:100%;padding:12px;border:2px solid #e5e7eb;border-radius:10px;font-size:15px;background:#fff}
+input:focus,select:focus{border-color:#ec4899;outline:none}
+.book-btn{width:100%;margin-top:16px;background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;border:none;padding:15px;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer}
+.wa-send{width:100%;margin-top:10px;background:#22c55e;color:#fff;border:none;padding:14px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer}
+.excel-btn{width:100%;margin-top:10px;background:#fff;border:2px solid #111827;padding:12px;border-radius:12px;font-weight:700;cursor:pointer}
+.success{background:#f0fdf4;border:1px solid #22c55e;padding:12px;border-radius:10px;margin-top:12px;font-size:14px;display:none}
+.count-badge{background:#111827;color:#fff;font-size:12px;padding:4px 10px;border-radius:20px;display:inline-block;margin-top:8px}
+.footer{text-align:center;font-size:12px;color:#9ca3af;padding:16px}
+.modal-bg{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);align-items:center;justify-content:center;z-index:99;padding:20px}
+.modal{background:#fff;border-radius:16px;padding:24px;width:100%;max-width:360px;text-align:center}
+.modal h3{margin-bottom:8px}
+.big-num{font-size:22px;font-weight:800;letter-spacing:1px;margin:14px 0;background:#f3f4f6;padding:12px;border-radius:10px;direction:ltr}
+.m-btn{display:block;width:100%;padding:13px;margin-top:10px;border-radius:10px;font-weight:700;font-size:15px;text-decoration:none;border:none;cursor:pointer}
+.m-call{background:#111827;color:#fff}
+.m-copy{background:#eef2ff;color:#111827}
+.m-close{background:#fff;color:#666;border:1px solid #ddd !important}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header">
+<h1>Apis Beauty London</h1>
+<p>⭐ 4.9 | Open Mon-Sat 9AM-7PM | New York</p>
+<div class="badges"><div class="badge">Hair</div><div class="badge">Nails</div><div class="badge">Facial</div></div>
+</div>
+<div class="contact-row">
+<a class="call-btn" href="javascript:void(0)" onclick="openCallModal()" id="callBtn">📞 Call Now</a>
+<a class="wa-btn" id="waTopBtn" href="https://wa.me/4474484050917" target="_blank">WhatsApp</a>
+</div>
+<div class="section">
+<h2>1. Choose Service</h2>
+<div class="services" id="services">
+<div class="svc selected" data-name="Haircut" data-price="25"><b>💇 Haircut</b><span>$25 • 30min</span></div>
+<div class="svc" data-name="Hair Color" data-price="60"><b>🎨 Hair Color</b><span>$60 • 90min</span></div>
+<div class="svc" data-name="Manicure" data-price="30"><b>💅 Manicure</b><span>$30 • 45min</span></div>
+<div class="svc" data-name="Facial" data-price="45"><b>✨ Facial</b><span>$45 • 60min</span></div>
+</div>
+<h2 style="margin-top:16px">2. Pick Date & Time</h2>
+<label>Your Name</label>
+<input id="cName" placeholder="e.g. Sarah">
+<label>Phone Number</label>
+<input id="cPhone" placeholder="e.g. 555 123 4567">
+<label>Service</label>
+<select id="cService"><option>Haircut - $25</option><option>Hair Color - $60</option><option>Manicure - $30</option><option>Facial - $45</option></select>
+<label>Date</label>
+<input id="cDate" type="date">
+<label>Time - Tap to Select</label>
+<div class="times" id="times">
+<div class="time" data-time="00:00">00:00</div>
+<div class="time" data-time="01:00">01:00</div>
+<div class="time" data-time="02:00">02:00</div>
+<div class="time" data-time="03:00">03:00</div>
+<div class="time" data-time="04:00">04:00</div>
+<div class="time" data-time="05:00">05:00</div>
+<div class="time" data-time="06:00">06:00</div>
+<div class="time" data-time="07:00">07:00</div>
+<div class="time" data-time="08:00">08:00</div>
+<div class="time" data-time="09:00">09:00</div>
+<div class="time selected" data-time="10:00">10:00</div>
+<div class="time" data-time="11:00">11:00</div>
+<div class="time" data-time="12:00">12:00</div>
+<div class="time" data-time="13:00">13:00</div>
+<div class="time" data-time="14:00">14:00</div>
+<div class="time" data-time="15:00">15:00</div>
+<div class="time" data-time="16:00">16:00</div>
+<div class="time" data-time="17:00">17:00</div>
+<div class="time" data-time="18:00">18:00</div>
+<div class="time" data-time="19:00">19:00</div>
+<div class="time" data-time="20:00">20:00</div>
+<div class="time" data-time="21:00">21:00</div>
+<div class="time" data-time="22:00">22:00</div>
+<div class="time" data-time="23:00">23:00</div>
+</div>
+<button class="book-btn" onclick="confirmBooking()">Confirm Booking ✓</button>
+<button class="wa-send" onclick="sendLastToWhatsApp()">Send Booking via WhatsApp</button>
+<div class="success" id="successBox"></div>
+</div>
+<div class="section">
+<h2>For Salon Owner</h2>
+<p style="font-size:13px;color:#666">Bookings go straight to your Excel file with neat rows.</p>
+<div><span class="count-badge" id="countBadge">0 bookings saved</span></div>
+<button class="excel-btn" onclick="downloadExcel()">⬇ Download Excel (.xls)</button>
+</div>
+<div class="footer">Demo booking page • Made for your salon</div>
+</div>
+<div class="modal-bg" id="callModal">
+<div class="modal">
+<h3>📞 Call Glam Beauty Salon</h3>
+<p style="font-size:14px;color:#666">Tap below to call us directly</p>
+<div class="big-num" id="displayNum">+447448405091</div>
+<a class="m-btn m-call" id="realCallBtn" href="tel:+4474484050917">Call Now</a>
+<button class="m-btn m-copy" onclick="copyPhone()">Copy Number</button>
+<button class="m-btn m-close" onclick="closeCallModal()">Close</button>
+</div>
+</div>
+<script>
+const SALON_PHONE = "4474484050917";
+const DISPLAY_PHONE = "+447448405091";
+const SALON_NAME = "Glam Beauty Salon";
+let selectedTime = "10:00";
+let lastBooking = null;
+document.getElementById('displayNum').innerText = DISPLAY_PHONE;
+document.getElementById('realCallBtn').href = "tel:+" + SALON_PHONE;
+document.getElementById('callBtn').innerText = "📞 " + DISPLAY_PHONE;
+document.getElementById('waTopBtn').href = "https://wa.me/" + SALON_PHONE + "?text=" + encodeURIComponent("Hi " + SALON_NAME + "! I want to book an appointment.");
+document.getElementById('cDate').min = new Date().toISOString().split('T')[0];
+function openCallModal(){document.getElementById('callModal').style.display='flex';}
+function closeCallModal(){document.getElementById('callModal').style.display='none';}
+document.getElementById('callModal').onclick=function(e){if(e.target===this)closeCallModal();};
+function copyPhone(){navigator.clipboard.writeText(DISPLAY_PHONE).then(()=>alert('Copied: '+DISPLAY_PHONE));}
+document.querySelectorAll('.svc').forEach(el=>{
+el.onclick=()=>{document.querySelectorAll('.svc').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');document.getElementById('cService').value=el.dataset.name+" - $"+el.dataset.price;}
+});
+document.querySelectorAll('.time').forEach(el=>{
+el.onclick=()=>{document.querySelectorAll('.time').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');selectedTime=el.dataset.time;}
+});
+function getBookings(){try{return JSON.parse(localStorage.getItem('salon_bookings')||'[]')}catch(e){return[]}}
+function updateCount(){const n=getBookings().length;document.getElementById('countBadge').innerText=n+" bookings saved";}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function confirmBooking(){
+const name=document.getElementById('cName').value.trim();
+const phone=document.getElementById('cPhone').value.trim();
+const service=document.getElementById('cService').value;
+const date=document.getElementById('cDate').value;
+if(!name||!phone||!date){alert('Please fill name, phone and date');return}
+const booking={name,phone,service,date,time:selectedTime,created:new Date().toLocaleString()};
+const all=getBookings();all.push(booking);localStorage.setItem('salon_bookings',JSON.stringify(all));
+lastBooking=booking;updateCount();
+const box=document.getElementById('successBox');box.style.display='block';
+box.innerHTML="✅ Booked! <b>"+esc(name)+"</b>, "+esc(service)+" on "+esc(date)+" at "+esc(selectedTime)+". Saved to Excel.";
+document.getElementById('cName').value="";document.getElementById('cPhone').value="";
+}
+function sendLastToWhatsApp(){
+if(!lastBooking){alert('Please confirm a booking first');return}
+const b=lastBooking;
+const text="New Booking - "+SALON_NAME+"%0AName: "+b.name+"%0APhone: "+b.phone+"%0AService: "+b.service+"%0ADate: "+b.date+"%0ATime: "+b.time;
+window.open("https://wa.me/"+SALON_PHONE+"?text="+text,'_blank');
+}
+function downloadExcel(){
+const rows=getBookings();
+if(!rows.length){alert('No bookings yet to export');return}
+let tableRows = rows.map((r,i)=>{
+const bg = (i%2===0) ? '#FFFFFF' : '#FDF2F8';
+return `<tr style="height:28px;background:${bg};">
+<td style="border:.5pt solid #D1D5DB;text-align:center;">${i+1}</td>
+<td style="border:.5pt solid #D1D5DB;mso-number-format:\\@;">${esc(r.name)}</td>
+<td style="border:.5pt solid #D1D5DB;mso-number-format:\\@;">${esc(r.phone)}</td>
+<td style="border:.5pt solid #D1D5DB;">${esc(r.service)}</td>
+<td style="border:.5pt solid #D1D5DB;text-align:center;mso-number-format:yyyy\\-mm\\-dd;">${esc(r.date)}</td>
+<td style="border:.5pt solid #D1D5DB;text-align:center;">${esc(r.time)}</td>
+<td style="border:.5pt solid #D1D5DB;">${esc(r.created)}</td>
+</tr>`;
+}).join('');
+const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Bookings</x:Name><x:WorksheetOptions><x:Print><x:FitToPage/></x:Print></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head>
+<body>
+<table border="1" cellpadding="6" cellspacing="0" style="border-collapse:collapse;font-family:Arial;font-size:11pt;">
+<colgroup>
+<col style="width:50px;">
+<col style="width:200px;">
+<col style="width:180px;">
+<col style="width:200px;">
+<col style="width:140px;">
+<col style="width:100px;">
+<col style="width:200px;">
+</colgroup>
+<tr><td colspan="7" style="font-size:16pt;font-weight:bold;text-align:center;background:#FCE7F3;height:36px;border:.5pt solid #D1D5DB;">${esc(SALON_NAME)} - Booking List</td></tr>
+<tr style="background:#EC4899;color:#FFFFFF;font-weight:bold;height:32px;text-align:center;">
+<th style="width:50px;border:.5pt solid #9D174D;">No.</th>
+<th style="width:200px;border:.5pt solid #9D174D;">Customer Name</th>
+<th style="width:180px;border:.5pt solid #9D174D;">Customer Phone</th>
+<th style="width:200px;border:.5pt solid #9D174D;">Service (e.g. Haircut)</th>
+<th style="width:140px;border:.5pt solid #9D174D;">Date</th>
+<th style="width:100px;border:.5pt solid #9D174D;">Time</th>
+<th style="width:200px;border:.5pt solid #9D174D;">Created At</th>
+</tr>
+${tableRows}
+</table>
+</body></html>`;
+const blob=new Blob(["\uFEFF"+html],{type:'application/vnd.ms-excel;charset=utf-8'});
+const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='salon-bookings.xls';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);
+}
+updateCount();
+</script>
+</body>
+</html>
